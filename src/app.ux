@@ -9,3 +9,8 @@ export default {
   createShortcut: util.createShortcut
 }
 </script>
+
+<style>
+    @import './Common/css/weui.css'; 
+    @import './Common/css/example.css';
+</style>
