@@ -1,6 +1,9 @@
 <template>
-    <div>
+    <!-- <div>
       <text class="text1" onclick="routeDemo">{{title1}}</text>
+    </div> -->
+    <div class="text1" >
+            <text>城市：{{ title1.ServiceCenter }}</text>
     </div>
 </template>
 <style>
@@ -8,12 +11,12 @@
 </style>
 <script>
 import router from '@system.router'
-import {RequestName} from '../Common/js/url-constant'
+import {HostName} from '../Common/js/urlconstant'
 
 export default {
   // 页面级组件的数据模型，影响传入数据的覆盖机制：private内定义的属性不允许被覆盖
   private: {
-    title1:RequestName
+    title1:HostName
   },
   routeDemo () {
     // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
@@ -22,5 +25,5 @@ export default {
     })
   }
 }
-// getServiceCenterUrl(RequestName.GET_VOICE_START)
+//getServiceCenterUrl(RequestName.GET_VOICE_START)
 </script>

@@ -3,7 +3,7 @@ const HostName =  {
   'ImageRecognize': '192.168.1.116:5000',
 }
 
-const RequestName =  {
+const RequestName = {
   'GET_VOICE_START' : 'get_voice_start',
 }
 
@@ -12,7 +12,7 @@ const RequestName =  {
 //   return serviceURL;
 // }
 
-export default {
+export {
   HostName,
   RequestName,
 }
