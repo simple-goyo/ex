@@ -25,7 +25,7 @@
     "logLevel": "off"
   },
   "router": {
-    "entry": "VoiceHome",
+    "entry": "Home",
     "pages": {
       "Demo": {
         "component": "index"
@@ -37,6 +37,9 @@
         "component": "index"
       },
       "VoiceHome": {
+        "component": "index"
+      },
+      "Home": {
         "component": "index"
       }
     },
@@ -70,6 +73,9 @@
         "menu": false
       },
       "VoiceHome": {
+        "titleBarText": ""
+      },
+      "Home": {
         "titleBarText": ""
       }
     }

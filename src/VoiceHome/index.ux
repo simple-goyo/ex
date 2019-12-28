@@ -1,10 +1,6 @@
 <template>
     <div>
-        <text onclick="routeDemo">hello world wjw</text>
-            <a class="weui-cell weui-cell_access" href="javascript:;">
-                <text class="weui-cell__bd" >hello world wjwassas
-                </text>
-        </a>
+      <text class="text1" onclick="routeDemo">hello world wjw</text>
     </div>
 </template>
 <style>
