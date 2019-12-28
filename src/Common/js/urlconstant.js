@@ -7,6 +7,7 @@ const RequestName = {
   'GET_VOICE_START' : 'get_voice_start',
 }
 
+
 // function getServiceCenterUrl(requestName) {
 //   const serviceURL = 'http://' + HostName.ServiceCenter + '/' + requestName;
 //   return serviceURL;
@@ -14,5 +15,5 @@ const RequestName = {
 
 export {
   HostName,
-  RequestName,
+  RequestName
 }

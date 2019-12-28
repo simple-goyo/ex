@@ -1,0 +1,143 @@
+<template>
+  <div class="doc-page">
+    <div class="item-container">
+      <div class="item-content">
+        <text>录音文件路径: {{path}}</text>
+      </div>
+      <div class="item-content">
+        <text class="txt">上传文件：{{fileUploadData}}</text>
+      </div>
+      <!-- <input type="button" class="btn" @click="start" value="开始录音" />
+      <input type="button" class="btn" @click="stop" value="录音完成" /> -->
+      <input type="button" class="btn" @touchstart="start" @touchend="stop" value="录音" />
+      <input type="button" class="btn" @click="playAudio" value="播放当前录音" />
+      <input type="button" class="btn" onclick="uploadFile" value="上传文件"/>      
+    </div>
+    
+  </div>
+</template>
+<script>
+import record from '@system.record'
+import audio from '@system.audio'
+import storage from '@system.storage'
+import request from '@system.request'
+import prompt from '@system.prompt'
+
+var filename
+
+export default {
+  private: {
+    //componentName: 'Record',
+    path: '',
+    fileUploadData: '',
+    token: '',
+    duration: 100000,
+    sampleRate: 16000,
+    numberOfChannels: 1,
+    encodeBitRate: 16000,
+    format: 'amr_nb'
+  },
+  // onInit() {
+  //   this.$page.setTitleBar({ text: this.componentName })
+  // },
+  start() {
+    this.path = '录音中...'
+    record.start({
+      duration: this.duration,
+      sampleRate: this.sampleRate,
+      numberOfChannels: this.numberOfChannels,
+      encodeBitRate: this.encodeBitRate,
+      format: this.format,
+      success: (data) => {
+        this.path = data.uri
+        this.fileUploadData = data.uri
+        
+        var splitedFile = data.uri.split("/");
+        filename = splitedFile[splitedFile.length-1]
+
+      },
+      fail: (err, code) => {
+        this.path = 'handling fail, code=' + code
+      }
+    })
+  },
+  stop() {
+    //this.path = '录音完成'
+    record.stop()
+  },
+  playAudio() {
+    audio.src = this.path
+    audio.play()
+  },
+  changeValue(args, evt) {
+    this[args] = evt.value
+    storage.set({
+      key: args,
+      value: evt.value
+    })
+  },
+  uploadFile () {
+    const self = this
+    request.upload({
+      url: 'http://192.168.1.110:8080/quickapp/batchSaveVoice',
+      files: [
+        {
+          uri: self.fileUploadData,
+          name:'name',
+          filename: "voice.amr"
+        }
+      ],
+      data:[
+        {
+          name: 'name2',
+          value: 'value1'
+        }
+      ],
+      success: function (ret) {
+        self.fileUploadData = ret.data
+      },
+      fail: function (msg, code) {
+        self.fileUploadData = `${code}: ${msg}`
+        console.info(`### request.upload ### ${code}: ${msg}`)
+        prompt.showToast({
+          message: `${code}: ${msg}`
+        })
+      }
+    })
+  }
+}
+</script>
+
+<style>
+  @import '../Common/css/common.css';
+
+  .item-container {
+    margin-bottom: 50px;
+    margin-right: 60px;
+    margin-left: 60px;
+    flex-direction: column;
+  }
+
+  .item-content {
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 30px;
+    margin-bottom: 50px;
+  }
+
+  .item-content input {
+    width: 400px;
+    margin-left: 10px;
+    padding: 10px;
+    text-align: center;
+    border-width: 1px;
+    border-color: #dddddd;
+    background-color: #ffffff;
+    width: 350px;
+  }
+  .txt {
+    lines: 5;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+</style>
