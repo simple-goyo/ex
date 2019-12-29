@@ -8,7 +8,8 @@
     <div class="item-container">
       <input type="button" class="btn" onclick="loadUrl" value="打开链接"/>
     </div>
-
+    <!-- <web id="web" src="http://192.168.1.110:8080/quickapp/voicerecord/voice_record.html" @message="{{onMessage}}"></web> -->
+    <web id="web" class="web-page" trustedurl="{{trust}}" src="http://192.168.1.110:8080/quickapp/voicerecord/voice_record.html" @pagefinish="onPageFinish" @message="onMessage"  allowthirdpartycookies="true"></web>
   </div>
 </template>
 
@@ -19,13 +20,30 @@
     private: {
       componentName: 'webview'
     },
+    public: {
+      trust:[
+        'http://192.168.1.110:8080/quickapp/voicerecord/voice_record.html'
+      ]
+    },
     onInit () {
       this.$page.setTitleBar({text: 'Webview'})
+    },
+    sendMsg (){
+      const msg = JSON.stringify(this.componentName)
+      this.$element('web').postMessage({message: msg})
     },
     loadUrl () {
       webview.loadUrl({
         url: 'http://192.168.1.110:8080/quickapp/voicerecord/voice_record.html'
       })
+    },
+    onMessage(param) {
+        //this.channel.onMsg(param)
+        //this.componentName = param
+        console.log(param);
+    },
+    onPageFinish(param) {
+        console.log(param);
     }
   }
 </script>

@@ -1,21 +1,21 @@
 <template>
   <div class="doc-page">
-    <div class="item-container">
+    <!-- <div class="item-container">
       <div class="item-content">
         <text>录音文件路径: {{path}}</text>
       </div>
       <div class="item-content">
         <text class="txt">上传文件：{{fileUploadData}}</text>
       </div>
-      <!-- <input type="button" class="btn" @click="start" value="开始录音" />
-      <input type="button" class="btn" @click="stop" value="录音完成" /> -->
       <input type="button" class="btn" @touchstart="start" @touchend="stop" value="录音" />
       <input type="button" class="btn" @click="playAudio" value="播放当前录音" />
-      <input type="button" class="btn" onclick="uploadFile" value="上传文件"/>      
-    </div>
-    
+      <input type="button" class="btn" onclick="uploadFile" value="上传文件"/>
+      
+    </div> -->
+    <web src="http://192.168.1.110:8080/quickapp/voicerecord/voice_record.html" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
   </div>
 </template>
+
 <script>
 import record from '@system.record'
 import audio from '@system.audio'
@@ -35,7 +35,21 @@ export default {
     sampleRate: 16000,
     numberOfChannels: 1,
     encodeBitRate: 16000,
-    format: 'amr_nb'
+    format: 'amr_nb',
+
+    param: {
+        'title': 'hello world0'
+      },
+    message: '',
+      // 只有trustedurl中信任的网址才能实现和框架的双向通信
+      // trustedurl的值为数组，元素可以是正则或字符串
+      // trustedurl会默认添加web组件src属性的初始值
+    trust: [
+        // 'http://192.168.1.110:8080/quickapp/voicerecord/page_one.html',
+        // 'http://192.168.1.110:8080/quickapp/voicerecord/page_two.html',
+        /^http:\/\/.*\.html$/
+      ]
+
   },
   // onInit() {
   //   this.$page.setTitleBar({ text: this.componentName })
@@ -56,8 +70,8 @@ export default {
         filename = splitedFile[splitedFile.length-1]
 
       },
-      fail: (err, code) => {
-        this.path = 'handling fail, code=' + code
+  fail: (err, code) => {
+      this.path = 'handling fail, code=' + code
       }
     })
   },
@@ -104,13 +118,34 @@ export default {
         })
       }
     })
+  },
+  sendMsg () {
+    const msg = JSON.stringify(this.param)
+    this.$element('web').postMessage({message: msg})
+  },
+  messagefn (e) {
+    this.message = e.message
+
+    // 判断开始或结束
+    if(e.message == "start")
+    {
+      this.start()
+    }else if(e.message == "stop"){
+      this.stop()
+    }
+
   }
 }
 </script>
 
 <style>
   @import '../Common/css/common.css';
-
+  
+  /* web {
+    flex: 0;
+    margin: 20px;
+  }
+   */
   .item-container {
     margin-bottom: 50px;
     margin-right: 60px;
