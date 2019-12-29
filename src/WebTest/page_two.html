@@ -13,12 +13,12 @@
 <h2></h2>
 <script>
   window.addEventListener('load', function () {
-    system.onmessage = function (data) {
-      document.body.querySelector('h2').innerHTML = data
-    }
-    document.body.querySelector('#back').addEventListener('click', function () {
-      window.history.back()
-    })
+    // system.onmessage = function (data) {
+    //   document.body.querySelector('h2').innerHTML = data
+    // }
+    // document.body.querySelector('#back').addEventListener('click', function () {
+    //   window.history.back()
+    // })
     document.body.querySelector('#send').addEventListener('click', sendMsg);
     function sendMsg() {
       system.postMessage('page_two.html: hello quickapp')

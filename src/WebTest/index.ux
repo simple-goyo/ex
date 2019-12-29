@@ -1,10 +1,10 @@
 <template>
   <div class="doc-page">
-    <!-- <div class="content">
+    <div class="content">
       <input type="button" value="发送param到html" onclick="sendMsg"/>
       <text>等待来自html页面的消息: {{message}}</text>
     </div>
-    <text>请根据实际情况，将page_one.html和page_two.html页面放到本地服务器。修改对应的请求地址，然后后进行测试。</text> -->
+    <text>请根据实际情况，将page_one.html和page_two.html页面放到本地服务器。修改对应的请求地址，然后后进行测试。</text>
     <web src="http://192.168.1.110:8080/quickapp/voicerecord/page_one.html" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
   </div>
 </template>

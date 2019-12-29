@@ -1,9 +1,13 @@
 <template>
   <div class="doc-page">
-    <!-- <div class="item-container">
-      <div class="item-content">
-        <text>录音文件路径: {{path}}</text>
-      </div>
+    <div class="item-content">
+      <input type="button" value="发送param到html" onclick="sendMsg"/>
+      <text>等待来自html页面的消息: {{message}}</text>
+    </div>
+    <!-- <div class="item-content">
+      <text>录音文件路径: {{path}}</text>
+    </div> -->
+    <!-- 
       <div class="item-content">
         <text class="txt">上传文件：{{fileUploadData}}</text>
       </div>
@@ -31,7 +35,7 @@ export default {
     path: '',
     fileUploadData: '',
     token: '',
-    duration: 100000,
+    duration: 5000,
     sampleRate: 16000,
     numberOfChannels: 1,
     encodeBitRate: 16000,
@@ -47,7 +51,8 @@ export default {
     trust: [
         // 'http://192.168.1.110:8080/quickapp/voicerecord/page_one.html',
         // 'http://192.168.1.110:8080/quickapp/voicerecord/page_two.html',
-        /^http:\/\/.*\.html$/
+        /^http:\/\/.*\.html$/,
+        /^http:\/\/.*$/
       ]
 
   },
@@ -55,7 +60,7 @@ export default {
   //   this.$page.setTitleBar({ text: this.componentName })
   // },
   start() {
-    this.path = '录音中...'
+    this.message = '录音中...'
     record.start({
       duration: this.duration,
       sampleRate: this.sampleRate,
@@ -68,7 +73,8 @@ export default {
         
         var splitedFile = data.uri.split("/");
         filename = splitedFile[splitedFile.length-1]
-
+        
+        this.uploadFile()
       },
   fail: (err, code) => {
       this.path = 'handling fail, code=' + code
@@ -124,13 +130,14 @@ export default {
     this.$element('web').postMessage({message: msg})
   },
   messagefn (e) {
-    this.message = e.message
+    //this.message = e.message
 
     // 判断开始或结束
-    if(e.message == "start")
+    if(e.message === "start")
     {
       this.start()
-    }else if(e.message == "stop"){
+    }else if(e.message === "stop"){
+      this.message = "stop"
       this.stop()
     }
 
