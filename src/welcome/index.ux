@@ -1,0 +1,44 @@
+<template>
+  <div class="doc-page">
+
+    <div class="page-title-wrap">
+      <text class="page-title">{{componentName}}</text>
+    </div>
+
+    <div class="item-container">
+      <input type="button" class="btn" onclick="loadUrl" value="打开链接"/>
+    </div>
+
+  </div>
+</template>
+
+<script>
+  import webview from '@system.webview'
+
+  export default {
+    private: {
+      componentName: 'webview'
+    },
+    onInit () {
+      this.$page.setTitleBar({text: 'Webview'})
+    },
+    loadUrl () {
+      webview.loadUrl({
+        url: 'http://192.168.1.110:8080/quickapp/voicerecord/voice_record.html'
+      })
+    }
+  }
+</script>
+
+<style>
+    @import '../Common/css/common.css';
+
+  .item-container {
+    margin-bottom: 50px;
+    margin-right: 60px;
+    margin-left: 60px;
+    flex-direction: column;
+  }
+</style>
+
+
