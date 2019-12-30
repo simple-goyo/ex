@@ -47,7 +47,7 @@ export default {
         quality: _this.photoQuality,
         success(data){
           // 获取回调中的照片地址
-          _this.pictureUrl = data.uri
+          //_this.pictureUrl = data.uri
           _this.recogPhoto()
           _this.jump_page()
         },
