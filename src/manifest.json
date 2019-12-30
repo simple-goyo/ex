@@ -25,7 +25,7 @@
     "logLevel": "off"
   },
   "router": {
-    "entry": "camera",
+    "entry": "VoiceRecord",
     "pages": {
       "Demo": {
         "component": "index"
@@ -46,6 +46,9 @@
         "component": "index"
       },
       "camera": {
+        "component": "index"
+      },
+      "VoiceRecord": {
         "component": "index"
       }
     },
@@ -86,6 +89,9 @@
       },
       "welcome": {
         "titleBarText": "欢迎的首页"
+      },
+      "VoiceRecord": {
+        "component": "index"
       }
       
     }
