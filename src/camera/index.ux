@@ -93,6 +93,9 @@ export default {
     onInit() {
       this.$page.setTitleBar({ text: '拍照' })
     },
+    recogPhoto() {
+        this.deviceInfo = '小米网关'
+    },
     takePhoto () {
       let _this = this
 
@@ -103,6 +106,8 @@ export default {
         success(data){
           // 获取回调中的照片地址
           _this.pictureUrl = data.uri
+          _this.recogPhoto()
+          _this.jump_page()
         },
         fail(data, code) {
           console.log('take photos failed：code' + code.code)
@@ -112,8 +117,13 @@ export default {
         }
       })
     },
-    recogPhoto() {
-        this.deviceInfo = '小米网关'
+
+    jump_page() {
+      setTimeout(() => {
+       router.push({
+        uri: WebAddr.VoiceUrl
+      })
+      }, 5000);
     },
     onHide() {
       // 页面被切换隐藏时，将要传递的数据对象写入
