@@ -1,0 +1,123 @@
+<template>
+  <div class="doc-page">
+    <!-- <div class="page-title-wrap">
+      <text class="page-title">{{componentName}}</text>
+    </div> -->
+
+    <div class="item-container">
+      <!-- 拍摄/选择图片 -->
+      <div class="item-content">
+        <text class="txt">拍摄图片的路径: {{pathPhotoSave}}</text>
+        <block if="{{isDisplayOneImage}}">
+          <!-- <text class="txt">选取图片的路径：{{pathPhotoPick}}</text> -->
+          <image src="{{photoUri}}" class="image"></image>
+        </block>
+        <block else>
+          <block for="{{pathFilePickArr}}">
+            <text class="txt">选取图片的路径：{{$item}}</text>
+            <image src="{{$item}}" class="image"></image>
+          </block>
+        </block>
+        <input type="button" class="btn" onclick="takePhoto" value="拍摄照片" />
+        <input type="button" class="btn" onclick="saveImageToAlbum" value="将拍摄的照片保存到本地" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import prompt from '@system.prompt'
+  import media from '@system.media'
+
+  export default {
+    private: {
+      componentName: 'media',
+      pathPhotoSave: '',
+      pathPhotoPick: '',
+      pathVideoSave: '',
+      pathVideoPick: '',
+      pathRecordStart: '',
+      pathRecordStop: '',
+      photoUri: '',
+      videoUri: '',
+      alarmName: '',
+      ringtoneName: '',
+      notificationName: '',
+      pathFilePick: '', // 选取文件的路径
+      pathFileName: '',
+      pathFileSize: 0,
+      isDisplayOneImage: true, // 是否显示一张图片
+      pathFilePickArr: [] // 多选图片,选取文件列表图片路径数组
+    },
+    onInit() {
+      this.$page.setTitleBar({ text: '照片拍摄' })
+    },
+    takePhoto() {
+      const self = this
+      media.takePhoto({
+        success: function (ret) {
+          self.pathPhotoSave = ret.uri
+          self.photoUri = ret.uri
+        },
+        fail: function (erromsg, errocode) {
+          console.info(`### media.takePhoto ### ${errocode}: ${erromsg}`)
+          prompt.showToast({
+            message: `${errocode}: ${erromsg}`
+          })
+        }
+      })
+    },
+
+    saveImageToAlbum() {
+      if (!this.pathPhotoSave) {
+        prompt.showToast({
+          message: `please take a photo firstly`
+        })
+        return
+      }
+      media.saveToPhotosAlbum({
+        uri: this.pathPhotoSave,
+        success: function () {
+          prompt.showToast({
+            message: `save success`
+          })
+        },
+        fail: function (erromsg, errocode) {
+          prompt.showToast({
+            message: `${errocode}: ${erromsg}`
+          })
+        }
+      })
+    }
+  }
+</script>
+
+<style>
+  @import './common.css';
+
+  .item-container {
+    margin-top: 50px;
+    margin-right: 60px;
+    margin-left: 60px;
+    flex-direction: column;
+  }
+
+  .item-content {
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 30px;
+    margin-bottom: 20px;
+  }
+
+  .image {
+    margin: 50px 0;
+    width: 630px;
+    height: 300px;
+  }
+
+  .video {
+    margin: 50px 0;
+    width: 630px;
+    height: 300px;
+  }
+</style>
