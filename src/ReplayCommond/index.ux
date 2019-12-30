@@ -1,5 +1,7 @@
 <template>
-    <text>{{privateData}}</text>
+    <div>
+        <web src="{{pageUrl}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
+    </div>
 </template>
 <style>
     text {
@@ -8,12 +10,37 @@
     }
 </style>
 <script>
+import fetch from '@system.fetch'
+import prompt from '@system.prompt'
+import {WebAddr} from '../Common/js/constant'
+
 export default {
     private: {
-        privateData: '1',
+        pageUrl: WebAddr.TextUrl0,
+        pageInfo:null,
     },
     onInit() {
-        this.privateData="12"
+        this.pageUrl+="正在执行请求1";
+        this.fetchDataNormal();
+    },
+    fetchDataNormal () {
+      const self = this
+      this.fetchedData = 'fetching...'
+      fetch.fetch({
+        url: WebAddr.QueryInfo,
+        data: {
+        },
+        responseType: 'json',// 支持返回类型是text、json、file和arraybuffer，默认返回字符串文本。
+        success: function (ret) {
+          // 注意self.fetchedData与ret接收的数据类型保持一致
+          // 设置responseType为json类型时，ret.data为json对象
+          self.fetchedData = ret.data
+
+          prompt.showToast({
+            message: self.fetchedData.name
+          })
+        }
+      })
     },
 }
 </script>
