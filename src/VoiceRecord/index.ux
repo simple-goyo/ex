@@ -1,10 +1,10 @@
 <template>
   <div class="doc-page">
-    <div class="item-content">
-      <!-- <input type="button" value="http://192.168.1.103:8080/quickapp/housekeeper/canvas-side-text/index.html?a=%E5%A5%BD%E7%9A%84@123" onclick="sendMsg"/> -->
+    <!-- <div class="item-content">
+      <input type="button" value="http://192.168.1.103:8080/quickapp/housekeeper/canvas-side-text/index.html?a=%E5%A5%BD%E7%9A%84@123" onclick="sendMsg"/> -->
       <!-- <text>调试输出: {{message}}</text>
       <text>等待来自html页面的消息: {{mesg}}</text> -->
-    </div>
+    <!-- </div> -->
     <!-- 
       <div class="item-content">
         <text class="txt">上传文件：{{fileUploadData}}</text>
@@ -155,9 +155,9 @@ export default {
   messagefn (e) {
     //this.message = e.message
     this.mesg = e.message
-    prompt.showToast({
-          message: e.message
-    },3000)
+    // prompt.showToast({
+    //       message: e.message
+    // },3000)
 
     // 判断开始或结束
     switch(e.message){
