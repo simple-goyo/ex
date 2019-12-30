@@ -16,7 +16,7 @@
       <input type="button" class="btn" onclick="uploadFile" value="上传文件"/>
       
     </div> -->
-    <web src="http://192.168.1.110:8080/quickapp/voicerecord/voice_record.html" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
+    <web src="http://192.168.1.112:8080/quickapp/voicerecord/voice_record.html" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
   </div>
 </template>
 
@@ -49,8 +49,8 @@ export default {
       // trustedurl的值为数组，元素可以是正则或字符串
       // trustedurl会默认添加web组件src属性的初始值
     trust: [
-        // 'http://192.168.1.110:8080/quickapp/voicerecord/page_one.html',
-        // 'http://192.168.1.110:8080/quickapp/voicerecord/page_two.html',
+        // 'http://192.168.1.112:8080/quickapp/voicerecord/page_one.html',
+        // 'http://192.168.1.112:8080/quickapp/voicerecord/page_two.html',
         /^http:\/\/.*\.html$/,
         /^http:\/\/.*$/
       ]
@@ -99,7 +99,7 @@ export default {
   uploadFile () {
     const self = this
     request.upload({
-      url: 'http://192.168.1.110:8080/quickapp/batchSaveVoice',
+      url: 'http://192.168.1.112:8080/quickapp/batchSaveVoice',
       files: [
         {
           uri: self.fileUploadData,
@@ -115,6 +115,9 @@ export default {
       ],
       success: function (ret) {
         self.fileUploadData = ret.data
+        this.message = ret.data
+        console.info(`${ret}`)
+
       },
       fail: function (msg, code) {
         self.fileUploadData = `${code}: ${msg}`
