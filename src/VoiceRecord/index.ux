@@ -1,7 +1,7 @@
 <template>
   <div class="doc-page">
     <div class="item-content">
-      <input type="button" value="发送param到html" onclick="sendMsg"/>
+      <!-- <input type="button" value="发送param到html" onclick="sendMsg"/> -->
       <text>等待来自html页面的消息: {{message}}</text>
     </div>
     <!-- <div class="item-content">
@@ -16,7 +16,7 @@
       <input type="button" class="btn" onclick="uploadFile" value="上传文件"/>
       
     </div> -->
-    <web src="http://192.168.1.112:8080/quickapp/voicerecord/voice_record.html" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
+    <web src="{{url}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
   </div>
 </template>
 
@@ -26,12 +26,14 @@ import audio from '@system.audio'
 import storage from '@system.storage'
 import request from '@system.request'
 import prompt from '@system.prompt'
+import router from '@system.router'
 
 var filename
 
 export default {
   private: {
     //componentName: 'Record',
+    baseUrl:'http://192.168.1.103:8080/',
     path: '',
     fileUploadData: '',
     token: '',
@@ -40,6 +42,7 @@ export default {
     numberOfChannels: 1,
     encodeBitRate: 16000,
     format: 'amr_nb',
+    url:'http://192.168.1.103:8080/quickapp/voicerecord/voice_record.html',
 
     param: {
         'title': 'hello world0'
@@ -99,7 +102,7 @@ export default {
   uploadFile () {
     const self = this
     request.upload({
-      url: 'http://192.168.1.112:8080/quickapp/batchSaveVoice',
+      url: this.baseUrl+'quickapp/batchSaveVoice',
       files: [
         {
           uri: self.fileUploadData,
@@ -114,14 +117,20 @@ export default {
         }
       ],
       success: function (ret) {
-        self.fileUploadData = ret.data
-        this.message = ret.data
-        console.info(`${ret}`)
+        self.message = ret.data
 
+        // 显示提示语
+        self.show_msg(ret.data)
+        
+        // 跳转
+        setTimeout(() => {
+          self.page_jump(ret.data)
+        }, 5000);
       },
       fail: function (msg, code) {
         self.fileUploadData = `${code}: ${msg}`
         console.info(`### request.upload ### ${code}: ${msg}`)
+        self.message = msg.data
         prompt.showToast({
           message: `${code}: ${msg}`
         })
@@ -144,6 +153,24 @@ export default {
       this.stop()
     }
 
+  },
+  show_msg(str) {
+    this.url = this.baseUrl+'quickapp/housekeeper/canvas-side-text/index.html?a=好的@'+str
+
+  },
+  page_jump(str) {
+    this.message = str.indexOf("设备")
+    if(str.indexOf("设备中心") !== -1){
+      this.url = this.baseUrl+'quickapp/sourceCenter/source_center.html'
+    }
+    else if(str.indexOf("服务中心") !== -1){
+      this.url = this.baseUrl+'quickapp/serviceCenter/service_center.html'
+    }
+    else if(str.indexOf("添加设备") !== -1||str.indexOf("拍照") !== -1){
+      router.push ({
+      uri: '/welcome'
+      })
+    }
   }
 }
 </script>
