@@ -1,8 +1,9 @@
 <template>
   <div class="doc-page">
     <div class="item-content">
-      <!-- <input type="button" value="发送param到html" onclick="sendMsg"/> -->
-      <text>等待来自html页面的消息: {{message}}</text>
+      <input type="button" value="http://192.168.1.103:8080/quickapp/housekeeper/canvas-side-text/index.html?a=%E5%A5%BD%E7%9A%84@123" onclick="sendMsg"/>
+      <text>调试输出: {{message}}</text>
+      <text>等待来自html页面的消息: {{mesg}}</text>
     </div>
     <!-- 
       <div class="item-content">
@@ -13,6 +14,7 @@
       <input type="button" class="btn" onclick="uploadFile" value="上传文件"/>
       
     </div> -->
+    <!-- <input type="button" class="btn" @click="playAudio" value="播放当前录音" /> -->
     <web src="{{pageUrl}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
   </div>
 </template>
@@ -25,7 +27,7 @@ import request from '@system.request'
 import prompt from '@system.prompt'
 import router from '@system.router'
 
-import {WebAddr} from './constant'
+import {WebAddr} from '../Common/js/constant'
 
 var filename
 
@@ -44,20 +46,33 @@ export default {
     param: {
         'title': 'hello world0'
       },
+    msg:'',
+    mesg:'',
     message: '',
       // 只有trustedurl中信任的网址才能实现和框架的双向通信
       // trustedurl的值为数组，元素可以是正则或字符串
       // trustedurl会默认添加web组件src属性的初始值
     trust: [
         /^http:\/\/.*\.html$/,
+        /^http:\/\/.*\.js$/,
         /^http:\/\/.*$/,
         /^https:\/\/.*$/
       ]
-
   },
   // onInit() {
   //   this.$page.setTitleBar({ text: this.componentName })
   // },
+  onShow () {
+      // 页面被切换显示时，从数据中检查是否有页面B传递来的数据
+      const data = this.$app.getAppData('dataFrom')
+      if (data && data.destPageName === 'pageVoiceRecord') {
+        // 获取回传给本页面的数据
+        this.msg = data.params && data.params.msg
+
+        // msg有数值的话，就传给content去做
+        this.show_msg(this.msg)
+      }
+  },
   start() {
     this.message = '录音中...'
     record.start({
@@ -85,7 +100,7 @@ export default {
     record.stop()
   },
   playAudio() {
-    audio.src = this.path
+    audio.src = WebAddr.baseUrl+'quickapp/voicerecord/SpeechSynthesizer.mp3'
     audio.play()
   },
   changeValue(args, evt) {
@@ -114,17 +129,10 @@ export default {
       ],
       success: function (ret) {
         self.message = ret.data
-
-        audio.src = WebAddr.baseUrl+'quickapp/voicerecord/SpeechSynthesizer.mp3'
-        audio.play()
         
         // 显示提示语
         self.show_msg(ret.data)
         
-        // // 跳转
-        // setTimeout(() => {
-        //   self.page_jump(ret.data)
-        // }, 5000);
       },
       fail: function (msg, code) {
         self.fileUploadData = `${code}: ${msg}`
@@ -142,9 +150,10 @@ export default {
   },
   messagefn (e) {
     //this.message = e.message
-
+    this.mesg = e.message
     // 判断开始或结束
     switch(e.message){
+
       case "start":
         this.start()
         break
@@ -152,20 +161,22 @@ export default {
         this.stop()
         break
 
-      default:break
+      default:
+        this.page_jump_org(e.message)
+      break
     }
 
   },
   show_msg(str) {
     this.pageUrl = WebAddr.TextUrl+str
 
-    setTimeout(() => {
-      this.page_jump_org(str)
-    }, 5000);
+    // setTimeout(() => {
+    //   this.page_jump_org(str)
+    // }, 5000);
 
   },
   page_jump_org(str) {
-    this.message = str.indexOf("设备")
+    //this.mesg = str.indexOf("设备")
     if(str.indexOf("设备中心") !== -1 || str.indexOf("资源中心") !== -1){
       this.pageUrl = WebAddr.ResourceUrl
     }

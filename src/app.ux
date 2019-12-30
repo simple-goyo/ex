@@ -5,6 +5,26 @@
 import util from './util'
 
 export default {
+    onCreate () {
+      // 初始化 app 缓存的数据
+      this.dataCache = {}
+    },
+    /**
+     * 获取 app 缓存的数据
+     * @param key
+     */
+    getAppData (key) {
+      return this.dataCache[key]
+    },
+    /**
+     * 设置 app 缓存的数据
+     * @param key
+     * @param val
+     */
+    setAppData (key, val) {
+      this.dataCache[key] = val
+    }
+  ,
   showMenu: util.showMenu,
   createShortcut: util.createShortcut
 }

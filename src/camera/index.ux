@@ -8,7 +8,7 @@
       <camera id="camera" class="camera" deviceposition="{{deviceposition}}" flash="{{flash}}" onerror="handlerError"></camera>
 
       <input type="button" value="拍照" class="btn" onclick="takePhoto"></input>
-      <image src="{{pictureUrl}}" class="picture"></image>
+      <!-- <image src="{{pictureUrl}}" class="picture"></image> -->
     </div>
   </div>
 </template>
@@ -72,7 +72,15 @@
 </style>
 
 <script>
-  export default {
+import storage from '@system.storage'
+import request from '@system.request'
+import prompt from '@system.prompt'
+import router from '@system.router'
+
+import {WebAddr} from '../Common/js/constant'
+
+
+export default {
     private: {
       componentName: '请拍摄设备',
       pictureUrl: '',
@@ -103,37 +111,15 @@
         }
       })
     },
-    // 切换照片质量
-    // switchQuality () {
-    //   const qualityArr = ['low', 'normal', 'high']
-    //   const index = qualityArr.indexOf(this.photoQuality)
-
-    //   if (index >= 2) {
-    //     this.photoQuality = qualityArr[0]
-    //   }
-    //   else {
-    //     this.photoQuality = qualityArr[index + 1]
-    //   }
-    // },
-    // 切换摄像头
-    // switchCamera (e) {
-    //   this.deviceposition = this.deviceposition === 'back' ? 'front' : 'back'
-    // },
-    // 切换闪关灯
-    // switchFlash () {
-    //   const flashArr = ['auto', 'on', 'off', 'torch']
-    //   const textArr = ['自动', '开', '关', '常亮']
-    //   const index = flashArr.indexOf(this.flash)
-
-    //   if (index >= 3) {
-    //     this.flash = flashArr[0]
-    //   }
-    //   else {
-    //     this.flash = flashArr[index + 1]
-    //   }
-
-    //   this.flashText = textArr[flashArr.indexOf(this.flash)]
-    // },
+    onHide() {
+      // 页面被切换隐藏时，将要传递的数据对象写入
+      this.$app.setAppData('dataFromB', {
+        destPageName: 'pageA',
+        params: {
+          msg: this.msg
+        }
+      })
+    },
     // 权限不允许处理
     handlerError () {
       console.log('用户不允许使用摄像头')
