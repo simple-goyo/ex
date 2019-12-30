@@ -165,6 +165,10 @@ export default {
         this.stop()
         break
 
+      case "小米网关":
+        this.jump_opr()
+        break
+
       default:
         this.page_jump_org(e.message)
       break
@@ -191,15 +195,8 @@ export default {
       router.push ({ uri: WebAddr.PhotoUri })
     }
   },
-  page_jump(str) {
-    switch(str){
-      case '1':
-      break
-      case '2':
-      break
-      default:
-      break
-    }
+  jump_opr(str) {
+    router.push ({ uri: WebAddr.ReplayCommond })
   }
 }
 </script>

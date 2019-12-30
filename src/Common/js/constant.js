@@ -9,6 +9,7 @@ const WebAddr = {
     ResourceUrl:BaseUrl+'quickapp/sourceCenter/source_center.html',
     ServiceUrl: BaseUrl+'quickapp/serviceCenter/service_center.html',
     PhotoUri:   '/camera',
+    ReplayUri:  '/ReplayCommond',
     QueryInfo:BaseUrl+'quickapp/queryInfo'
 }
 export {
