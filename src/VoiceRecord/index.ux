@@ -59,14 +59,14 @@ export default {
         /^https:\/\/.*$/
       ]
   },
-  // onInit() {
-  //   this.$page.setTitleBar({ text: this.componentName })
-  // },
+  onInit() {
+    debugger
+  },
   onShow () {
       // 页面被切换显示时，从数据中检查是否有页面B传递来的数据
       const data = this.$app.getAppData('dataFrom')
       if (data && data.destPageName === 'pageVoiceRecord') {
-        debugger
+
         // 获取回传给本页面的数据
         this.msg = data.params && data.params.msg
         this.pageUrl = WebAddr.TextUrl
@@ -164,7 +164,6 @@ export default {
         break
 
       default:
-      debugger
         this.page_jump_org(e.message)
       break
     }
