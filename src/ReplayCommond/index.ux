@@ -1,6 +1,7 @@
 <template>
     <div>
         <web src="{{pageUrl}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
+        <button>下一步</button>
     </div>
 </template>
 <style>
@@ -21,7 +22,7 @@ export default {
     },
     onInit() {
         this.pageUrl+="正在执行请求";
-        this.updateInfo()
+        // this.updateInfo()
     },
     updateInfo () {
       const self = this
