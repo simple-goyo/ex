@@ -44,10 +44,12 @@
       },
       "VoiceRecord": {
         "component": "index"
+      },
+      "ReplayCommond": {
+        "component": "index"
       }
     },
-    "widgets": {
-    }
+    "widgets": {}
   },
   "display": {
     "titleBarBackgroundColor": "#f2f2f2",
@@ -68,8 +70,10 @@
       },
       "VoiceRecord": {
         "component": "index"
+      },
+      "ReplayCommond": {
+        "titleBarText": ""
       }
-      
     }
   }
 }
