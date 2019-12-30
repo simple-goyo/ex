@@ -87,7 +87,8 @@ export default {
       photoQuality: 'normal',
       deviceposition: "back",
       flash: "auto",
-      flashText: '自动'
+      flashText: '自动',
+      deviceInfo:''
     },
     onInit() {
       this.$page.setTitleBar({ text: '拍照' })
@@ -111,12 +112,15 @@ export default {
         }
       })
     },
+    recogPhoto() {
+        this.deviceInfo = '小米网关'
+    },
     onHide() {
       // 页面被切换隐藏时，将要传递的数据对象写入
-      this.$app.setAppData('dataFromB', {
-        destPageName: 'pageA',
+      this.$app.setAppData('dataFrom', {
+        destPageName: 'pageVoiceRecord',
         params: {
-          msg: this.msg
+          msg: this.deviceInfo
         }
       })
     },

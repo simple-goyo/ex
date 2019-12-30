@@ -183,15 +183,18 @@ export default {
     else if(str.indexOf("服务中心") !== -1){
       this.pageUrl = WebAddr.ServiceUrl
     }
-    else if(str.indexOf("添加设备") !== -1||str.indexOf("拍照") !== -1){
+    else if(str.indexOf("注册") !== -1||str.indexOf("添加设备") !== -1||str.indexOf("拍照") !== -1){
       router.push ({ uri: WebAddr.PhotoUri })
     }
   },
   page_jump(str) {
     switch(str){
-      case '':break
-      case '':break
-      default:break
+      case '1':
+      break
+      case '2':
+      break
+      default:
+      break
     }
   }
 }
