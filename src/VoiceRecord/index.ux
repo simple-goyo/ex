@@ -65,13 +65,14 @@ export default {
   onShow () {
       // 页面被切换显示时，从数据中检查是否有页面B传递来的数据
       const data = this.$app.getAppData('dataFrom')
-      prompt.showToast({
-            message: data
-      })
+      
       if (data && data.destPageName === 'pageVoiceRecord') {
 
         // 获取回传给本页面的数据
-        this.msg = data.params && data.params.msg
+        this.msg = data.params.msg
+        prompt.showToast({
+            message: this.msg
+      },1000)
         // msg有数值的话，就传给content去做
         
         this.show_msg(this.msg)
@@ -155,6 +156,10 @@ export default {
   messagefn (e) {
     //this.message = e.message
     this.mesg = e.message
+    prompt.showToast({
+          message: e.message
+    },3000)
+
     // 判断开始或结束
     switch(e.message){
 
@@ -178,10 +183,6 @@ export default {
   show_msg(str) {
     this.pageUrl = WebAddr.TextUrl+str
 
-    // setTimeout(() => {
-    //   this.page_jump_org(str)
-    // }, 5000);
-
   },
   page_jump_org(str) {
     //this.mesg = str.indexOf("设备")
@@ -195,8 +196,8 @@ export default {
       router.push ({ uri: WebAddr.PhotoUri })
     }
   },
-  jump_opr(str) {
-    router.push ({ uri: WebAddr.ReplayCommond })
+  jump_opr() {
+    router.push ({ uri: WebAddr.ReplayUri })
   }
 }
 </script>
