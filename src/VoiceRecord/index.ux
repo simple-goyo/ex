@@ -2,8 +2,8 @@
   <div class="doc-page">
     <div class="item-content">
       <!-- <input type="button" value="http://192.168.1.103:8080/quickapp/housekeeper/canvas-side-text/index.html?a=%E5%A5%BD%E7%9A%84@123" onclick="sendMsg"/> -->
-      <text>调试输出: {{message}}</text>
-      <text>等待来自html页面的消息: {{mesg}}</text>
+      <!-- <text>调试输出: {{message}}</text>
+      <text>等待来自html页面的消息: {{mesg}}</text> -->
     </div>
     <!-- 
       <div class="item-content">

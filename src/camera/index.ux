@@ -56,6 +56,7 @@ export default {
         },
         complete() {
           console.log('complete')
+          prompt.showToast('完成拍照')
         }
       })
 
