@@ -1,123 +1,158 @@
 <template>
   <div class="doc-page">
-    <!-- <div class="page-title-wrap">
+    <div class="page-title-wrap">
       <text class="page-title">{{componentName}}</text>
-    </div> -->
+    </div>
 
-    <div class="item-container">
-      <!-- 拍摄/选择图片 -->
-      <div class="item-content">
-        <text class="txt">拍摄图片的路径: {{pathPhotoSave}}</text>
-        <block if="{{isDisplayOneImage}}">
-          <!-- <text class="txt">选取图片的路径：{{pathPhotoPick}}</text> -->
-          <image src="{{photoUri}}" class="image"></image>
-        </block>
-        <block else>
-          <block for="{{pathFilePickArr}}">
-            <text class="txt">选取图片的路径：{{$item}}</text>
-            <image src="{{$item}}" class="image"></image>
-          </block>
-        </block>
-        <input type="button" class="btn" onclick="takePhoto" value="拍摄照片" />
-        <input type="button" class="btn" onclick="saveImageToAlbum" value="将拍摄的照片保存到本地" />
-      </div>
+    <div class="container">
+      <camera id="camera" class="camera" deviceposition="{{deviceposition}}" flash="{{flash}}" onerror="handlerError"></camera>
+
+      <input type="button" value="拍照" class="btn" onclick="takePhoto"></input>
+
+      <!-- <div class="item-content">
+        <text>当前设置图片质量：{{photoQuality}}</text>
+        <input type="button" value="切换图片质量" class="btn" onclick="switchQuality"></input>
+      </div> -->
+
+      <!-- <div class="item-content">
+        <text>{{deviceposition}}</text>
+        <input type="button" value="切换摄像头" class="btn" onclick="switchCamera"></input>
+      </div> -->
+
+      <!-- <div class="item-content column">
+        <text class="item-content-title">{{flashText}}</text>
+        <input type="button" value="切换闪关灯" class="btn" onclick="switchFlash"></input>
+      </div> -->
+
+      <image src="{{pictureUrl}}" class="picture"></image>
     </div>
   </div>
 </template>
 
-<script>
-  import prompt from '@system.prompt'
-  import media from '@system.media'
-
-  export default {
-    private: {
-      componentName: 'media',
-      pathPhotoSave: '',
-      pathPhotoPick: '',
-      pathVideoSave: '',
-      pathVideoPick: '',
-      pathRecordStart: '',
-      pathRecordStop: '',
-      photoUri: '',
-      videoUri: '',
-      alarmName: '',
-      ringtoneName: '',
-      notificationName: '',
-      pathFilePick: '', // 选取文件的路径
-      pathFileName: '',
-      pathFileSize: 0,
-      isDisplayOneImage: true, // 是否显示一张图片
-      pathFilePickArr: [] // 多选图片,选取文件列表图片路径数组
-    },
-    onInit() {
-      this.$page.setTitleBar({ text: '照片拍摄' })
-    },
-    takePhoto() {
-      const self = this
-      media.takePhoto({
-        success: function (ret) {
-          self.pathPhotoSave = ret.uri
-          self.photoUri = ret.uri
-        },
-        fail: function (erromsg, errocode) {
-          console.info(`### media.takePhoto ### ${errocode}: ${erromsg}`)
-          prompt.showToast({
-            message: `${errocode}: ${erromsg}`
-          })
-        }
-      })
-    },
-
-    saveImageToAlbum() {
-      if (!this.pathPhotoSave) {
-        prompt.showToast({
-          message: `please take a photo firstly`
-        })
-        return
-      }
-      media.saveToPhotosAlbum({
-        uri: this.pathPhotoSave,
-        success: function () {
-          prompt.showToast({
-            message: `save success`
-          })
-        },
-        fail: function (erromsg, errocode) {
-          prompt.showToast({
-            message: `${errocode}: ${erromsg}`
-          })
-        }
-      })
-    }
-  }
-</script>
-
 <style>
-  @import './common.css';
-
-  .item-container {
-    margin-top: 50px;
-    margin-right: 60px;
-    margin-left: 60px;
+  .doc-page {
     flex-direction: column;
+    padding: 0 75px;
+  }
+
+  .page-title-wrap {
+    padding-top: 50px;
+    padding-bottom: 80px;
+    justify-content: center;
+  }
+
+  .page-title{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-color: #bbbbbb;
+    color: #bbbbbb;
+    border-bottom-width: 2px;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    padding-bottom: 20px;
+  }
+
+  .camera {
+    flex: 1;
+    width: 600px;
+    height: 400px;
+  }
+
+  .btn {
+    width: 600px;
+    height: 80px;
+    text-align: center;
+    border-radius: 5px;
+    margin: 20px 0;
+    margin-bottom: 50px;
+    color: #ffffff;
+    font-size: 30px;
+    background-color: #0faeff;
+  }
+
+  .picture {
+    width: 600px;
+    height: 400px;
+    margin-bottom: 20px;
   }
 
   .item-content {
     flex-direction: column;
-    background-color: #ffffff;
-    padding: 30px;
-    margin-bottom: 20px;
-  }
-
-  .image {
-    margin: 50px 0;
-    width: 630px;
-    height: 300px;
-  }
-
-  .video {
-    margin: 50px 0;
-    width: 630px;
-    height: 300px;
   }
 </style>
+
+<script>
+  export default {
+    private: {
+      componentName: '请拍摄设备',
+      pictureUrl: '',
+      photoQuality: 'normal',
+      deviceposition: "back",
+      flash: "auto",
+      flashText: '自动'
+    },
+    onInit() {
+      this.$page.setTitleBar({ text: '拍照' })
+    },
+    takePhoto () {
+      let _this = this
+
+      // 调用相机组件的照相功能
+      this.$element('camera').takePhoto({
+        // 通过quality参数设置照片质量 默认为normal
+        quality: _this.photoQuality,
+        success(data){
+          // 获取回调中的照片地址
+          _this.pictureUrl = data.uri
+        },
+        fail(data, code) {
+          console.log('take photos failed：code' + code.code)
+        },
+        complete() {
+          console.log('complete')
+        }
+      })
+    },
+    // 切换照片质量
+    // switchQuality () {
+    //   const qualityArr = ['low', 'normal', 'high']
+    //   const index = qualityArr.indexOf(this.photoQuality)
+
+    //   if (index >= 2) {
+    //     this.photoQuality = qualityArr[0]
+    //   }
+    //   else {
+    //     this.photoQuality = qualityArr[index + 1]
+    //   }
+    // },
+    // 切换摄像头
+    // switchCamera (e) {
+    //   this.deviceposition = this.deviceposition === 'back' ? 'front' : 'back'
+    // },
+    // 切换闪关灯
+    // switchFlash () {
+    //   const flashArr = ['auto', 'on', 'off', 'torch']
+    //   const textArr = ['自动', '开', '关', '常亮']
+    //   const index = flashArr.indexOf(this.flash)
+
+    //   if (index >= 3) {
+    //     this.flash = flashArr[0]
+    //   }
+    //   else {
+    //     this.flash = flashArr[index + 1]
+    //   }
+
+    //   this.flashText = textArr[flashArr.indexOf(this.flash)]
+    // },
+    // 权限不允许处理
+    handlerError () {
+      console.log('用户不允许使用摄像头')
+    }
+  }
+</script>
