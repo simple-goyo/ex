@@ -26,12 +26,14 @@ import audio from '@system.audio'
 import storage from '@system.storage'
 import request from '@system.request'
 import prompt from '@system.prompt'
+import router from '@system.router'
 
 var filename
 
 export default {
   private: {
     //componentName: 'Record',
+    baseUrl:'http://192.168.1.103:8080/',
     path: '',
     fileUploadData: '',
     token: '',
@@ -100,7 +102,7 @@ export default {
   uploadFile () {
     const self = this
     request.upload({
-      url: 'http://192.168.1.103:8080/quickapp/batchSaveVoice',
+      url: this.baseUrl+'quickapp/batchSaveVoice',
       files: [
         {
           uri: self.fileUploadData,
@@ -153,18 +155,22 @@ export default {
 
   },
   show_msg(str) {
-    this.url = 'http://192.168.1.103:8080/quickapp/housekeeper/canvas-side-text/index.html?a=好的@'+str
+    this.url = this.baseUrl+'quickapp/housekeeper/canvas-side-text/index.html?a=好的@'+str
 
   },
   page_jump(str) {
     this.message = str.indexOf("设备")
-    if(str.indexOf("设备") !== -1){
-      this.url = 'http://192.168.1.103:8080/quickapp/voicerecord/page_one.html'
-    } 
-    else{
-      this.url = 'http://192.168.1.103:8080/quickapp/voicerecord/page_two.html'
-    }   
-
+    if(str.indexOf("设备中心") !== -1){
+      this.url = this.baseUrl+'quickapp/sourceCenter/source_center.html'
+    }
+    else if(str.indexOf("服务中心") !== -1){
+      this.url = this.baseUrl+'quickapp/serviceCenter/service_center.html'
+    }
+    else if(str.indexOf("添加设备") !== -1||str.indexOf("拍照") !== -1){
+      router.push ({
+      uri: '/welcome'
+      })
+    }
   }
 }
 </script>
