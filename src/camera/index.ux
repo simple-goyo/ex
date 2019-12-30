@@ -8,22 +8,6 @@
       <camera id="camera" class="camera" deviceposition="{{deviceposition}}" flash="{{flash}}" onerror="handlerError"></camera>
 
       <input type="button" value="拍照" class="btn" onclick="takePhoto"></input>
-
-      <!-- <div class="item-content">
-        <text>当前设置图片质量：{{photoQuality}}</text>
-        <input type="button" value="切换图片质量" class="btn" onclick="switchQuality"></input>
-      </div> -->
-
-      <!-- <div class="item-content">
-        <text>{{deviceposition}}</text>
-        <input type="button" value="切换摄像头" class="btn" onclick="switchCamera"></input>
-      </div> -->
-
-      <!-- <div class="item-content column">
-        <text class="item-content-title">{{flashText}}</text>
-        <input type="button" value="切换闪关灯" class="btn" onclick="switchFlash"></input>
-      </div> -->
-
       <image src="{{pictureUrl}}" class="picture"></image>
     </div>
   </div>
@@ -60,8 +44,8 @@
 
   .camera {
     flex: 1;
-    width: 600px;
-    height: 400px;
+    width: 800px;
+    height: 600px;
   }
 
   .btn {
