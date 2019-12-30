@@ -40,9 +40,6 @@ export default {
           // 设置responseType为json类型时，ret.data为json对象
           self.fetchedData = ret.data
           self.queryInfo ()
-          prompt.showToast({
-            message: self.fetchedData
-          })
         }
       })
     },
