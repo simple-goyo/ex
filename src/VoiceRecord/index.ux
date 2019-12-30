@@ -118,8 +118,10 @@ export default {
       ],
       success: function (ret) {
         self.message = ret.data
+
         audio.src = self.baseUrl+'quickapp/voicerecord/SpeechSynthesizer.mp3'
         audio.play()
+        
         // 显示提示语
         self.show_msg(ret.data)
         
