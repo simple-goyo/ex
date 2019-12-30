@@ -4,9 +4,6 @@
       <!-- <input type="button" value="发送param到html" onclick="sendMsg"/> -->
       <text>等待来自html页面的消息: {{message}}</text>
     </div>
-    <!-- <div class="item-content">
-      <text>录音文件路径: {{path}}</text>
-    </div> -->
     <!-- 
       <div class="item-content">
         <text class="txt">上传文件：{{fileUploadData}}</text>
@@ -16,7 +13,7 @@
       <input type="button" class="btn" onclick="uploadFile" value="上传文件"/>
       
     </div> -->
-    <web src="{{url}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
+    <web src="{{pageUrl}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
   </div>
 </template>
 
@@ -28,12 +25,12 @@ import request from '@system.request'
 import prompt from '@system.prompt'
 import router from '@system.router'
 
+import {WebAddr} from './constant'
+
 var filename
 
 export default {
   private: {
-    //componentName: 'Record',
-    baseUrl:'http://192.168.1.103:8080/',
     path: '',
     fileUploadData: '',
     token: '',
@@ -42,7 +39,7 @@ export default {
     numberOfChannels: 1,
     encodeBitRate: 16000,
     format: 'amr_nb',
-    url:'http://192.168.1.103:8080/quickapp/voicerecord/voice_record.html',
+    pageUrl: WebAddr.VoiceUrl,
 
     param: {
         'title': 'hello world0'
@@ -52,10 +49,9 @@ export default {
       // trustedurl的值为数组，元素可以是正则或字符串
       // trustedurl会默认添加web组件src属性的初始值
     trust: [
-        // 'http://192.168.1.112:8080/quickapp/voicerecord/page_one.html',
-        // 'http://192.168.1.112:8080/quickapp/voicerecord/page_two.html',
         /^http:\/\/.*\.html$/,
-        /^http:\/\/.*$/
+        /^http:\/\/.*$/,
+        /^https:\/\/.*$/
       ]
 
   },
@@ -102,7 +98,7 @@ export default {
   uploadFile () {
     const self = this
     request.upload({
-      url: this.baseUrl+'quickapp/batchSaveVoice',
+      url: WebAddr.RecoUrl,
       files: [
         {
           uri: self.fileUploadData,
@@ -119,16 +115,16 @@ export default {
       success: function (ret) {
         self.message = ret.data
 
-        audio.src = self.baseUrl+'quickapp/voicerecord/SpeechSynthesizer.mp3'
+        audio.src = WebAddr.baseUrl+'quickapp/voicerecord/SpeechSynthesizer.mp3'
         audio.play()
         
         // 显示提示语
         self.show_msg(ret.data)
         
-        // 跳转
-        setTimeout(() => {
-          self.page_jump(ret.data)
-        }, 5000);
+        // // 跳转
+        // setTimeout(() => {
+        //   self.page_jump(ret.data)
+        // }, 5000);
       },
       fail: function (msg, code) {
         self.fileUploadData = `${code}: ${msg}`
@@ -148,72 +144,48 @@ export default {
     //this.message = e.message
 
     // 判断开始或结束
-    if(e.message === "start")
-    {
-      this.start()
-    }else if(e.message === "stop"){
-      this.message = "stop"
-      this.stop()
+    switch(e.message){
+      case "start":
+        this.start()
+        break
+      case "stop":
+        this.stop()
+        break
+
+      default:break
     }
 
   },
   show_msg(str) {
-    this.url = this.baseUrl+'quickapp/housekeeper/canvas-side-text/index.html?a=好的@'+str
+    this.pageUrl = WebAddr.TextUrl+str
 
+    setTimeout(() => {
+      this.page_jump_org(str)
+    }, 5000);
 
   },
-  page_jump(str) {
+  page_jump_org(str) {
     this.message = str.indexOf("设备")
-    if(str.indexOf("设备中心") !== -1){
-      this.url = this.baseUrl+'quickapp/sourceCenter/source_center.html'
+    if(str.indexOf("设备中心") !== -1 || str.indexOf("资源中心") !== -1){
+      this.pageUrl = WebAddr.ResourceUrl
     }
     else if(str.indexOf("服务中心") !== -1){
-      this.url = this.baseUrl+'quickapp/serviceCenter/service_center.html'
+      this.pageUrl = WebAddr.ServiceUrl
     }
     else if(str.indexOf("添加设备") !== -1||str.indexOf("拍照") !== -1){
-      router.push ({
-      uri: '/camera'
-      })
+      router.push ({ uri: WebAddr.PhotoUri })
+    }
+  },
+  page_jump(str) {
+    switch(str){
+      case '':break
+      case '':break
+      default:break
     }
   }
 }
 </script>
 
 <style>
-  @import '../Common/css/common.css';
-  
-  /* web {
-    flex: 0;
-    margin: 20px;
-  }
-   */
-  .item-container {
-    margin-bottom: 50px;
-    margin-right: 60px;
-    margin-left: 60px;
-    flex-direction: column;
-  }
-
-  .item-content {
-    flex-direction: column;
-    background-color: #ffffff;
-    padding: 30px;
-    margin-bottom: 50px;
-  }
-
-  .item-content input {
-    width: 400px;
-    margin-left: 10px;
-    padding: 10px;
-    text-align: center;
-    border-width: 1px;
-    border-color: #dddddd;
-    background-color: #ffffff;
-    width: 350px;
-  }
-  .txt {
-    lines: 5;
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
+  @import './custom.css';
 </style>

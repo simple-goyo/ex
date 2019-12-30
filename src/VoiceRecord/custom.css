@@ -1,0 +1,36 @@
+@import '../Common/css/common.css';
+  
+/* web {
+  flex: 0;
+  margin: 20px;
+}
+ */
+.item-container {
+  margin-bottom: 50px;
+  margin-right: 60px;
+  margin-left: 60px;
+  flex-direction: column;
+}
+
+.item-content {
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 30px;
+  margin-bottom: 50px;
+}
+
+.item-content input {
+  width: 400px;
+  margin-left: 10px;
+  padding: 10px;
+  text-align: center;
+  border-width: 1px;
+  border-color: #dddddd;
+  background-color: #ffffff;
+  width: 350px;
+}
+.txt {
+  lines: 5;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
