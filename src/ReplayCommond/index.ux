@@ -20,7 +20,7 @@ export default {
         pageInfo:null,
     },
     onInit() {
-        this.pageUrl+="正在执行请求1";
+        this.pageUrl+="正在注册设备";
         this.updateInfo()
     },
     updateInfo () {
