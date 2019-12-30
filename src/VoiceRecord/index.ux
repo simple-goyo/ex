@@ -118,7 +118,8 @@ export default {
       ],
       success: function (ret) {
         self.message = ret.data
-
+        audio.src = self.baseUrl+'quickapp/voicerecord/SpeechSynthesizer.mp3'
+        audio.play()
         // 显示提示语
         self.show_msg(ret.data)
         
@@ -157,6 +158,7 @@ export default {
   show_msg(str) {
     this.url = this.baseUrl+'quickapp/housekeeper/canvas-side-text/index.html?a=好的@'+str
 
+
   },
   page_jump(str) {
     this.message = str.indexOf("设备")
@@ -168,7 +170,7 @@ export default {
     }
     else if(str.indexOf("添加设备") !== -1||str.indexOf("拍照") !== -1){
       router.push ({
-      uri: '/welcome'
+      uri: '/camera'
       })
     }
   }
