@@ -21,9 +21,32 @@ export default {
     },
     onInit() {
         this.pageUrl+="正在执行请求1";
-        this.fetchDataNormal();
+        this.updateInfo()
     },
-    fetchDataNormal () {
+    updateInfo () {
+      const self = this
+      this.fetchedData = 'fetching...'
+      fetch.fetch({
+        url: WebAddr.UpdateInfo,
+        method:"POST",
+        data: {
+            name:'小米网关',
+            url:'',
+            state:'11',
+        },
+        responseType: 'text',// 支持返回类型是text、json、file和arraybuffer，默认返回字符串文本。
+        success: function (ret) {
+          // 注意self.fetchedData与ret接收的数据类型保持一致
+          // 设置responseType为json类型时，ret.data为json对象
+          self.fetchedData = ret.data
+          self.queryInfo ()
+          prompt.showToast({
+            message: self.fetchedData
+          })
+        }
+      })
+    },
+    queryInfo () {
       const self = this
       this.fetchedData = 'fetching...'
       fetch.fetch({
@@ -35,7 +58,6 @@ export default {
           // 注意self.fetchedData与ret接收的数据类型保持一致
           // 设置responseType为json类型时，ret.data为json对象
           self.fetchedData = ret.data
-
           prompt.showToast({
             message: self.fetchedData.name
           })

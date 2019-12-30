@@ -60,7 +60,7 @@ export default {
       ]
   },
   onInit() {
-    debugger
+    // debugger
   },
   onShow () {
       // 页面被切换显示时，从数据中检查是否有页面B传递来的数据
