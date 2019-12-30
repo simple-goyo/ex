@@ -8,10 +8,83 @@
       <camera id="camera" class="camera" deviceposition="{{deviceposition}}" flash="{{flash}}" onerror="handlerError"></camera>
 
       <input type="button" value="拍照" class="btn" onclick="takePhoto"></input>
-      <!-- <image src="{{pictureUrl}}" class="picture"></image> -->
+      <image src="{{pictureUrl}}" class="picture"></image>
     </div>
   </div>
 </template>
+
+<script>
+import storage from '@system.storage'
+import request from '@system.request'
+import prompt from '@system.prompt'
+import router from '@system.router'
+
+import {WebAddr} from '../Common/js/constant'
+
+
+export default {
+    private: {
+      componentName: '请拍摄设备',
+      pictureUrl: '',
+      photoQuality: 'normal',
+      deviceposition: "back",
+      flash: "auto",
+      flashText: '自动',
+      deviceInfo:''
+    },
+    onInit() {
+      this.$page.setTitleBar({ text: '拍照' })
+    },
+    recogPhoto() {
+        this.deviceInfo = '小米网关'
+    },
+    takePhoto () {
+      let _this = this
+
+      // 调用相机组件的照相功能
+      this.$element('camera').takePhoto({
+        // 通过quality参数设置照片质量 默认为normal
+        quality: _this.photoQuality,
+        success(data){
+          // 获取回调中的照片地址
+          _this.pictureUrl = data.uri
+          _this.recogPhoto()
+          _this.jump_page()
+        },
+        fail(data, code) {
+          console.log('take photos failed：code' + code.code)
+        },
+        complete() {
+          console.log('complete')
+        }
+      })
+
+
+    },
+  onHide() {
+      // 页面被切换隐藏时，将要传递的数据对象写入
+      this.$app.setAppData('dataFrom', {
+        destPageName: 'pageVoiceRecord',
+        params: {
+          msg: this.deviceInfo
+        }
+      })
+    },
+    jump_page() {
+      setTimeout(() => {
+       router.back({
+        uri: WebAddr.VoiceUrl
+      })
+      }, 5000);
+    },
+    // 权限不允许处理
+    handlerError () {
+      console.log('用户不允许使用摄像头')
+    }
+}
+</script>
+
+
 
 <style>
   .doc-page {
@@ -70,73 +143,3 @@
     flex-direction: column;
   }
 </style>
-
-<script>
-import storage from '@system.storage'
-import request from '@system.request'
-import prompt from '@system.prompt'
-import router from '@system.router'
-
-import {WebAddr} from '../Common/js/constant'
-
-
-export default {
-    private: {
-      componentName: '请拍摄设备',
-      pictureUrl: '',
-      photoQuality: 'normal',
-      deviceposition: "back",
-      flash: "auto",
-      flashText: '自动',
-      deviceInfo:''
-    },
-    onInit() {
-      this.$page.setTitleBar({ text: '拍照' })
-    },
-    recogPhoto() {
-        this.deviceInfo = '小米网关'
-    },
-    takePhoto () {
-      let _this = this
-
-      // 调用相机组件的照相功能
-      this.$element('camera').takePhoto({
-        // 通过quality参数设置照片质量 默认为normal
-        quality: _this.photoQuality,
-        success(data){
-          // 获取回调中的照片地址
-          _this.pictureUrl = data.uri
-          _this.recogPhoto()
-          _this.jump_page()
-        },
-        fail(data, code) {
-          console.log('take photos failed：code' + code.code)
-        },
-        complete() {
-          console.log('complete')
-        }
-      })
-    },
-
-    jump_page() {
-      setTimeout(() => {
-       router.push({
-        uri: WebAddr.VoiceUrl
-      })
-      }, 5000);
-    },
-    onHide() {
-      // 页面被切换隐藏时，将要传递的数据对象写入
-      this.$app.setAppData('dataFrom', {
-        destPageName: 'pageVoiceRecord',
-        params: {
-          msg: this.deviceInfo
-        }
-      })
-    },
-    // 权限不允许处理
-    handlerError () {
-      console.log('用户不允许使用摄像头')
-    }
-  }
-</script>

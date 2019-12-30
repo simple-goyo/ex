@@ -60,16 +60,17 @@ export default {
       ]
   },
   onInit() {
-    // debugger
   },
   onShow () {
       // 页面被切换显示时，从数据中检查是否有页面B传递来的数据
       const data = this.$app.getAppData('dataFrom')
+      prompt.showToast({
+            message: data
+      })
       if (data && data.destPageName === 'pageVoiceRecord') {
 
         // 获取回传给本页面的数据
         this.msg = data.params && data.params.msg
-        this.pageUrl = WebAddr.TextUrl
         // msg有数值的话，就传给content去做
         
         this.show_msg(this.msg)
@@ -163,6 +164,10 @@ export default {
         this.stop()
         break
 
+      case "小米网关":
+        this.jump_opr()
+        break
+
       default:
         this.page_jump_org(e.message)
       break
@@ -189,15 +194,8 @@ export default {
       router.push ({ uri: WebAddr.PhotoUri })
     }
   },
-  page_jump(str) {
-    switch(str){
-      case '1':
-      break
-      case '2':
-      break
-      default:
-      break
-    }
+  jump_opr(str) {
+    router.push ({ uri: WebAddr.ReplayCommond })
   }
 }
 </script>

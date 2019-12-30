@@ -10,7 +10,8 @@ const WebAddr = {
     ServiceUrl: BaseUrl+'quickapp/serviceCenter/service_center.html',
     PhotoUri:   '/camera',
     QueryInfo:BaseUrl+'quickapp/queryInfo',
-    UpdateInfo:BaseUrl+'quickapp/updateInfo'
+    UpdateInfo:BaseUrl+'quickapp/updateInfo',
+    ReplayUri:  '/ReplayCommond',
 }
 export {
     BaseUrl,
