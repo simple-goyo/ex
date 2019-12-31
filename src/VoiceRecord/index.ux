@@ -173,14 +173,18 @@ export default {
         this.jump_opr()
         break
 
-      case "东菱咖啡机":
+      case "东菱咖啡机。":
         this.jump_opr()
         break
 
-      case "做咖啡":
+      case "做咖啡。":
         this.jump_opr()
         break
 
+      case "喝咖啡。":
+        this.jump_opr()
+        break
+        
       default:
         this.page_jump_org(e.message)
       break

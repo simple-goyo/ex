@@ -1,13 +1,24 @@
 <template>
     <div>
-        <web src="{{pageUrl}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
-        <button>下一步</button>
+        <web class="webview" src="{{pageUrl}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
+        <input type="button" class="next_btn" value="下&#10;一&#10;步" onclick="nextStep" />
     </div>
 </template>
 <style>
+    @import '../Common/css/common.css';
     text {
         font-size: 40px;
         text-align: center;
+    }
+    .webview{
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    }
+    .next_btn{
+        font-size: 40px;
+        flex-direction: column;
+        color: #0faeff;
     }
 </style>
 <script>
@@ -19,9 +30,11 @@ export default {
     private: {
         pageUrl: WebAddr.TextUrl0,
         pageInfo:null,
+        stepNum:0
     },
     onInit() {
         this.pageUrl+="正在执行请求";
+        this.nextStep()
         // this.updateInfo()
     },
     updateInfo () {
@@ -62,5 +75,14 @@ export default {
         }
       })
     },
+    nextStep(){
+        this.stepNum+=1;
+        if(this.stepNum>8){
+            this.pageUrl=WebAddr.TextUrl0+"恭喜完成！"
+            return
+        }
+        this.pageUrl="http://10.141.221.88:8080/sc/quickapp/housekeeper/video/step"+this.stepNum+".mp4"
+        
+    }
 }
 </script>
