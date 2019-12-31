@@ -69,9 +69,9 @@ export default {
 
         // 获取回传给本页面的数据
         this.msg = data.params.msg
-        prompt.showToast({
-            message: this.msg
-      },1000)
+      //   prompt.showToast({
+      //       message: this.msg
+      // },1000)
         // msg有数值的话，就传给content去做
         
         this.show_msg(this.msg)
@@ -172,6 +172,14 @@ export default {
       case "小米网关":
         this.jump_opr()
         break
+      
+      case "开灯。":
+        this.jump_opr()
+        break
+      
+      case "关灯。":
+        this.jump_opr()
+        break
 
       case "东菱咖啡机。":
         this.jump_opr()
@@ -184,6 +192,11 @@ export default {
       case "喝咖啡。":
         this.jump_opr()
         break
+      
+      case "打开空气净化器。":
+        this.jump_opr()
+        break
+      
         
       default:
         this.page_jump_org(e.message)

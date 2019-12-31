@@ -1,7 +1,9 @@
 <template>
     <div>
         <web class="webview" src="{{pageUrl}}" trustedurl="{{trust}}" onmessage="messagefn" id="web"></web>
-        <input type="button" class="next_btn" value="下&#10;一&#10;步" onclick="nextStep" />
+        <!-- <div class="item-content">
+        </div> -->
+        <!-- <input type="button" class="next_btn" value="下一步" onclick="nextStep" /> -->
     </div>
 </template>
 <style>
@@ -11,7 +13,7 @@
         text-align: center;
     }
     .webview{
-    flex: 1;
+    flex: 0;
     height: 100%;
     width: 100%;
     }
@@ -20,6 +22,12 @@
         flex-direction: column;
         color: #0faeff;
     }
+    .item-content {
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 40px;
+}
 </style>
 <script>
 import fetch from '@system.fetch'
@@ -34,8 +42,8 @@ export default {
     },
     onInit() {
         this.pageUrl+="正在执行请求";
-        this.nextStep()
-        // this.updateInfo()
+        // this.nextStep()
+        this.updateInfo()
     },
     updateInfo () {
       const self = this
@@ -69,9 +77,9 @@ export default {
           // 注意self.fetchedData与ret接收的数据类型保持一致
           // 设置responseType为json类型时，ret.data为json对象
           self.fetchedData = ret.data
-          prompt.showToast({
-            message: self.fetchedData.name
-          })
+        //   prompt.showToast({
+        //     message: self.fetchedData.name
+        //   })
         }
       })
     },
